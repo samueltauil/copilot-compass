@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "noEmit": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true
+  },
+  "include": ["server.ts", "src/github-client.ts", "src/report-generator.ts", "src/types.ts", "src/html-report-generator.ts", "src/visual-report-generator.ts", "src/svg-charts.ts"],
+  "exclude": ["node_modules", "dist", "src/ui", "src/mcp-app.tsx", "src/global.css"]
+}

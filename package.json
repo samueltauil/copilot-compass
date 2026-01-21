@@ -1,0 +1,70 @@
+{
+  "name": "copilot-compass",
+  "version": "1.0.0",
+  "description": "MCP App for navigating GitHub Copilot usage metrics with interactive dashboards",
+  "type": "module",
+  "main": "dist/server.js",
+  "icon": "assets/icon.svg",
+  "mcp": {
+    "name": "Copilot Compass",
+    "description": "Generate comprehensive GitHub Copilot usage reports with interactive dashboards",
+    "icon": "assets/icon.svg",
+    "transport": "http"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run watch\" \"npm run serve\"",
+    "serve": "tsx --watch server.ts",
+    "watch": "cross-env INPUT=mcp-app.html vite build --watch",
+    "build": "cross-env INPUT=mcp-app.html vite build && tsc -p tsconfig.server.json",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:ui": "cross-env INPUT=mcp-app.html vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "start": "node dist/server.js",
+    "tunnel": "cloudflared tunnel --url http://localhost:3001",
+    "public": "concurrently \"npm run serve\" \"npm run tunnel\""
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.24.0",
+    "@types/express": "^5.0.6",
+    "chart.js": "^4.4.0",
+    "date-fns": "^3.3.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "react": "^19.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^1.2.0",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.2.4",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0",
+    "vite-plugin-singlefile": "^2.3.0",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
