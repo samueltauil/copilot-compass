@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="compassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#58a6ff" />
+      <stop offset="100%" style="stop-color:#a371f7" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer ring -->
+  <circle cx="64" cy="64" r="56" fill="none" stroke="url(#compassGrad)" stroke-width="4"/>
+  
+  <!-- Inner circle -->
+  <circle cx="64" cy="64" r="8" fill="url(#compassGrad)"/>
+  
+  <!-- Cardinal directions -->
+  <text x="64" y="24" text-anchor="middle" fill="#e6edf3" font-family="system-ui" font-size="12" font-weight="bold">N</text>
+  <text x="64" y="112" text-anchor="middle" fill="#8b949e" font-family="system-ui" font-size="12" font-weight="bold">S</text>
+  <text x="108" y="68" text-anchor="middle" fill="#8b949e" font-family="system-ui" font-size="12" font-weight="bold">E</text>
+  <text x="20" y="68" text-anchor="middle" fill="#8b949e" font-family="system-ui" font-size="12" font-weight="bold">W</text>
+  
+  <!-- Compass needle (North pointing) -->
+  <polygon points="64,18 58,64 70,64" fill="#f85149"/>
+  
+  <!-- Compass needle (South pointing) -->
+  <polygon points="64,110 58,64 70,64" fill="#8b949e"/>
+  
+  <!-- Small tick marks -->
+  <line x1="64" y1="12" x2="64" y2="16" stroke="#e6edf3" stroke-width="2"/>
+  <line x1="64" y1="112" x2="64" y2="116" stroke="#8b949e" stroke-width="2"/>
+  <line x1="12" y1="64" x2="16" y2="64" stroke="#8b949e" stroke-width="2"/>
+  <line x1="112" y1="64" x2="116" y2="64" stroke="#8b949e" stroke-width="2"/>
+  
+  <!-- Diagonal tick marks -->
+  <line x1="27.7" y1="27.7" x2="30.5" y2="30.5" stroke="#6e7681" stroke-width="1.5"/>
+  <line x1="100.3" y1="27.7" x2="97.5" y2="30.5" stroke="#6e7681" stroke-width="1.5"/>
+  <line x1="27.7" y1="100.3" x2="30.5" y2="97.5" stroke="#6e7681" stroke-width="1.5"/>
+  <line x1="100.3" y1="100.3" x2="97.5" y2="97.5" stroke="#6e7681" stroke-width="1.5"/>
+</svg>
