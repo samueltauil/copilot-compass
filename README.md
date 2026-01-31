@@ -187,7 +187,7 @@ Generate a comprehensive Copilot usage report with interactive dashboard.
 | `dateRange.to` | string | Yes | End date (YYYY-MM-DD) |
 
 **Example prompt:**
-```
+```text
 Generate a Copilot report for enterprise "acme-corp" from 2024-01-01 to 2024-01-31
 ```
 
@@ -203,7 +203,7 @@ Same parameters as above, but with `visibility: ["app"]` — hidden from AI, inv
 
 ## Project Structure
 
-```
+```text
 copilot-compass/
 ├── server.ts                    # MCP server entry (tools + resources)
 ├── src/
