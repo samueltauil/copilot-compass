@@ -219,12 +219,19 @@ copilot-compass/
 ├── assets/
 │   └── icon.svg                 # Compass icon
 ├── dist/                        # Build output
+├── .env.example                 # Sample environment variables
 ├── vite.config.ts               # Vite config (singlefile plugin)
 ├── tsconfig.json                # TypeScript config (React)
 └── tsconfig.server.json         # TypeScript config (Node.js)
 ```
 
 ## Configuration
+
+Copy the sample environment file and configure your settings:
+
+```bash
+cp .env.example .env
+```
 
 ### Environment Variables
 
