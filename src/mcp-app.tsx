@@ -6,7 +6,7 @@ import {
     useApp,
     useHostStyles,
     type App,
-    type HostContext,
+    type McpUiHostContext,
 } from "@modelcontextprotocol/ext-apps/react";
 
 import {
@@ -67,7 +67,7 @@ function formatNumber(num: number): string {
 
 function CopilotApp() {
     const [reportData, setReportData] = useState<CopilotReport | null>(null);
-    const [hostContext, setHostContext] = useState<HostContext>();
+    const [hostContext, setHostContext] = useState<McpUiHostContext | undefined>();
     const [error, setError] = useState<string | null>(null);
 
     const { app, isConnected, error: appError } = useApp({
@@ -105,7 +105,7 @@ function CopilotApp() {
             };
 
             app.onhostcontextchanged = (params) => {
-                setHostContext((prev) => ({ ...prev, ...params }));
+                setHostContext((prev: McpUiHostContext | undefined) => ({ ...prev, ...params }));
             };
         },
     });
@@ -142,7 +142,7 @@ function CopilotApp() {
 
 interface ReportDashboardProps {
     reportData: CopilotReport | null;
-    hostContext?: HostContext;
+    hostContext?: McpUiHostContext;
     error: string | null;
 }
 
