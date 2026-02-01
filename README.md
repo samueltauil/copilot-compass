@@ -87,7 +87,7 @@ Unlike traditional dashboards, Copilot Compass leverages the **MCP Apps SDK** pa
 ### Prerequisites
 
 - **Node.js** 18+ 
-- **VS Code Insiders** — Required for MCP Apps SDK (interactive dashboard). [Download here](https://code.visualstudio.com/insiders/)
+- **VS Code Insiders** — Required for MCP Apps SDK (interactive dashboard). [Download here](https://code.visualstudio.com/insiders/). *VS Code Stable supports MCP tools but not the visual dashboard UI yet.*
 - **GitHub PAT** with scopes:
   - `manage_billing:copilot` — Access Copilot metrics
   - `read:enterprise` — Enterprise-level access
@@ -178,7 +178,9 @@ The default uses `localhost:3001`. If using a tunnel (cloudflared, ngrok), edit 
 
 ### Run in GitHub Codespaces
 
-> ⚠️ **Important:** MCP Apps SDK (interactive dashboard UI) requires **VS Code Insiders**. The Codespaces web editor uses stable VS Code. To use the full dashboard UI, you must connect from VS Code Insiders on your local machine.
+> ⚠️ **Important:** MCP Apps SDK (interactive dashboard UI) currently requires **VS Code Insiders**. The Codespaces web editor uses stable VS Code. To use the full dashboard UI, you must connect from VS Code Insiders on your local machine.
+>
+> 📌 **Note:** MCP Apps SDK support is expected to ship in VS Code Stable in a future release. See the [official MCP Apps documentation](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_use-mcp-server-resources-to-enrich-ai-responses) and the [MCP Apps SDK repository](https://github.com/modelcontextprotocol/ext-apps) for the latest updates.
 
 #### Option A: Connect from VS Code Insiders Desktop (Full UI)
 
