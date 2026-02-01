@@ -176,26 +176,23 @@ The default uses `localhost:3001`. If using a tunnel (cloudflared, ngrok), edit 
 
 > **Note:** `.vscode/mcp.json` is gitignored so your local config won't be overwritten.
 
-### Run in GitHub Codespaces (Easiest)
+### Run in GitHub Codespaces
 
-> ⚠️ **Important:** MCP Apps SDK (interactive dashboard UI) requires **VS Code Insiders**. The standard Codespaces editor uses stable VS Code which doesn't support MCP Apps yet.
+> ⚠️ **Important:** MCP Apps SDK (interactive dashboard UI) requires **VS Code Insiders**. The Codespaces web editor uses stable VS Code. To use the full dashboard UI, you must connect from VS Code Insiders on your local machine.
 
-#### Enable VS Code Insiders for Codespaces
+#### Option A: Connect from VS Code Insiders Desktop (Full UI)
 
-1. Go to [github.com/settings/codespaces](https://github.com/settings/codespaces)
-2. Scroll to **Editor preference**
-3. Select **Visual Studio Code Insiders** (not the stable version)
-4. Now create your Codespace — it will open in VS Code Insiders
+This gives you the complete MCP Apps experience with the interactive dashboard.
 
-Alternatively, you can open an existing Codespace in VS Code Insiders desktop:
-1. Install [VS Code Insiders](https://code.visualstudio.com/insiders/)
-2. Open your Codespace on github.com
-3. Click the hamburger menu (≡) → **Open in VS Code Desktop**
-4. Select "Visual Studio Code Insiders" when prompted
+1. Install [VS Code Insiders](https://code.visualstudio.com/insiders/) locally
+2. Install the [GitHub Codespaces extension](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces) in VS Code Insiders
+3. Create a Codespace at [github.com/samueltauil/copilot-compass](https://github.com/samueltauil/copilot-compass)
+4. In the Codespace web view, click the hamburger menu (≡) → **Open in VS Code Desktop**
+5. When prompted, choose **Visual Studio Code Insiders**
 
-#### Create Codespace
+#### Option B: Use Codespaces Web Editor (Tools Only)
 
-The fastest way to get started — no local setup required! Codespaces provides automatic HTTPS URLs and **auto-configures** the MCP client settings for you.
+If you just need the MCP **tools** (not the visual dashboard), the web editor works fine:
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/samueltauil/copilot-compass?quickstart=1)
 
@@ -211,11 +208,10 @@ When your Codespace starts:
 1. ✅ Dependencies are installed and project is built
 2. ✅ MCP server starts automatically in the background on port 3001
 3. ✅ Port 3001 is made public with HTTPS
-4. ✅ `.vscode/mcp.json` is created from the example template
-5. ✅ MCP discovery is enabled in VS Code settings
-6. ✅ README opens in preview mode
+4. ✅ MCP config is created at `/home/codespace/.vscode-remote/data/Machine/mcp.json`
+5. ✅ MCP settings are enabled (`chat.mcp.enabled`, `chat.mcp.discovery.enabled`)
 
-The MCP server URL will be: `https://{codespace-name}-3001.app.github.dev/mcp`
+The MCP server URL is: `http://localhost:3001/mcp` (via port forwarding)
 
 #### Configure GitHub Token (Optional)
 
