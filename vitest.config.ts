@@ -1,0 +1,22 @@
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['tests/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov'],
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/**/*.d.ts',
+        'src/mcp-app.tsx',
+        'src/ui/**',
+        'src/global.css'
+      ]
+    },
+    setupFiles: ['tests/setup.ts'],
+    testTimeout: 10000
+  }
+});
