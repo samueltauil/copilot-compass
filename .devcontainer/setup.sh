@@ -54,7 +54,6 @@ fi
 
 echo ""
 echo "🚀 Starting MCP server on http://localhost:3001..."
-echo "   Logs: /tmp/mcp-server.log"
 echo "======================================"
 
 # Make port public (only in Codespaces) - run in background
@@ -62,5 +61,17 @@ if [ -n "$CODESPACE_NAME" ]; then
     (sleep 5 && gh codespace ports visibility 3001:public -c "$CODESPACE_NAME" 2>/dev/null) &
 fi
 
-# Start the server
-exec node dist/server.js
+# Start the server in background with proper logging
+nohup node dist/server.js > /tmp/mcp-server.log 2>&1 &
+SERVER_PID=$!
+echo "✅ MCP server started (PID: $SERVER_PID)"
+echo "   Logs: tail -f /tmp/mcp-server.log"
+
+# Wait a moment and verify it's running
+sleep 2
+if kill -0 $SERVER_PID 2>/dev/null; then
+    echo "✅ Server is running"
+else
+    echo "❌ Server failed to start. Check /tmp/mcp-server.log"
+    cat /tmp/mcp-server.log
+fi

@@ -16,7 +16,7 @@
   },
 
   "postCreateCommand": "npm install && npm run build",
-  "postStartCommand": "nohup bash .devcontainer/setup.sh > /tmp/mcp-server.log 2>&1 &",
+  "postStartCommand": "bash .devcontainer/setup.sh",
 
   "customizations": {
     "vscode": {
