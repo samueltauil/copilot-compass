@@ -17,10 +17,27 @@ if [ ! -f "dist/server.js" ]; then
     npm run build
 fi
 
-# Copy mcp.json from example if not present
+# Copy mcp.json from example if not present (workspace level)
 if [ ! -f ".vscode/mcp.json" ]; then
     cp .vscode/mcp.json.example .vscode/mcp.json
     echo "✅ Created .vscode/mcp.json from example"
+fi
+
+# Also write to VS Code's machine-level config (where Codespaces actually reads it)
+MACHINE_MCP_DIR="/home/codespace/.vscode-remote/data/Machine"
+if [ -d "/home/codespace" ]; then
+    mkdir -p "$MACHINE_MCP_DIR"
+    cat > "$MACHINE_MCP_DIR/mcp.json" << 'MCPEOF'
+{
+  "servers": {
+    "copilot-compass": {
+      "type": "http",
+      "url": "http://localhost:3001/mcp"
+    }
+  }
+}
+MCPEOF
+    echo "✅ Created $MACHINE_MCP_DIR/mcp.json"
 fi
 
 echo ""
