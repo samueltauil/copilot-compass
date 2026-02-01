@@ -32,7 +32,8 @@
         "typescript.preferences.importModuleSpecifier": "relative",
         "terminal.integrated.defaultProfile.linux": "bash",
         "chat.mcp.discovery.enabled": true,
-        "chat.mcp.enabled": true
+        "chat.mcp.enabled": true,
+        "chat.mcp.gallery.enabled": true
       }
     },
     "codespaces": {
