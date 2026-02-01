@@ -27,9 +27,9 @@
 <p align="center">
   <a href="#features">Features</a> •
   <a href="#quick-start">Quick Start</a> •
+  <a href="#public-access-via-tunnel">Tunnel</a> •
   <a href="#usage-examples">Usage</a> •
   <a href="#architecture">Architecture</a> •
-  <a href="#mcp-integration">MCP Integration</a> •
   <a href="#troubleshooting">Troubleshooting</a>
 </p>
 
@@ -152,6 +152,136 @@ Add to your MCP client configuration (e.g., Claude Desktop, VS Code):
     }
   }
 }
+```
+
+### Public Access via Tunnel
+
+To expose your local MCP server to the internet (useful for sharing, mobile access, or cloud-based MCP clients), you can use a tunneling service.
+
+#### Option 1: Cloudflare Tunnel (Recommended)
+
+[Cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/) provides free, secure tunnels with automatic HTTPS.
+
+```bash
+# Install cloudflared (Windows)
+winget install cloudflare.cloudflared
+
+# Install cloudflared (macOS)
+brew install cloudflared
+
+# Install cloudflared (Linux)
+curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+chmod +x cloudflared
+```
+
+**Start the tunnel:**
+
+```bash
+# In one terminal, start the MCP server
+npm start
+
+# In another terminal, create the tunnel
+cloudflared tunnel --url http://localhost:3001
+```
+
+Cloudflared outputs a public URL like `https://random-words.trycloudflare.com`. Use this in your MCP client config:
+
+```json
+{
+  "mcpServers": {
+    "copilot-compass": {
+      "type": "http",
+      "url": "https://random-words.trycloudflare.com/mcp"
+    }
+  }
+}
+```
+
+> **Note**: The free `trycloudflare.com` URL changes each time you restart the tunnel. For a persistent URL, set up a [named tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-local-tunnel/) with your own domain.
+
+#### Option 2: ngrok
+
+[ngrok](https://ngrok.com/) is another popular tunneling option with a free tier.
+
+```bash
+# Install ngrok
+npm install -g ngrok
+
+# Or download from https://ngrok.com/download
+```
+
+**Start the tunnel:**
+
+```bash
+# Start the MCP server
+npm start
+
+# In another terminal
+ngrok http 3001
+```
+
+ngrok provides a URL like `https://abc123.ngrok.io`. Update your MCP config accordingly.
+
+#### Option 3: Tailscale Funnel
+
+If you use [Tailscale](https://tailscale.com/), you can use [Funnel](https://tailscale.com/kb/1223/funnel/) to expose services.
+
+```bash
+tailscale funnel 3001
+```
+
+### Running as a Background Service
+
+For production or persistent deployments:
+
+**Using PM2 (Node.js process manager):**
+
+```bash
+# Install PM2
+npm install -g pm2
+
+# Start the server
+pm2 start dist/server.js --name copilot-compass
+
+# View logs
+pm2 logs copilot-compass
+
+# Stop the server
+pm2 stop copilot-compass
+
+# Auto-start on system boot
+pm2 startup
+pm2 save
+```
+
+**Using systemd (Linux):**
+
+Create `/etc/systemd/system/copilot-compass.service`:
+
+```ini
+[Unit]
+Description=Copilot Compass MCP Server
+After=network.target
+
+[Service]
+Type=simple
+User=your-user
+WorkingDirectory=/path/to/copilot-compass
+ExecStart=/usr/bin/node dist/server.js
+Restart=on-failure
+Environment=GITHUB_TOKEN=your-token
+Environment=PORT=3001
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable copilot-compass
+sudo systemctl start copilot-compass
 ```
 
 ## Architecture
