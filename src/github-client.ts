@@ -15,6 +15,7 @@
  */
 
 import type { DateRange, CopilotUsageMetrics, CacheEntry } from './types.js';
+import { validateMetricsResponse, formatValidationErrors } from './schemas.js';
 
 // =============================================================================
 // Configuration
@@ -25,6 +26,9 @@ const GITHUB_API_BASE = "https://api.github.com";
 
 /** Cache TTL in milliseconds (default: 5 minutes) */
 const CACHE_TTL_MS = (parseInt(process.env.CACHE_TTL_SECONDS || "300", 10)) * 1000;
+
+/** Enable runtime validation of API responses */
+const VALIDATE_RESPONSES = process.env.VALIDATE_API_RESPONSES !== 'false';
 
 // =============================================================================
 // In-Memory Cache
@@ -213,13 +217,16 @@ export class GitHubApiClient {
         console.log(`[API Call] Fetching enterprise metrics for ${enterpriseSlug}`);
 
         // GitHub API uses 'since' and 'until' parameters for date range
-        const metrics = await this.request<CopilotUsageMetrics[]>(
+        const rawData = await this.request<unknown>(
             `/enterprises/${enterpriseSlug}/copilot/metrics`,
             {
                 since: dateRange.from,
                 until: dateRange.to,
             }
         );
+
+        // Validate and transform the response
+        const metrics = this.validateResponse(rawData, enterpriseSlug);
 
         this.setCache(cacheKey, metrics);
         return metrics;
@@ -249,7 +256,7 @@ export class GitHubApiClient {
 
         console.log(`[API Call] Fetching organization metrics for ${orgName}`);
 
-        const metrics = await this.request<CopilotUsageMetrics[]>(
+        const rawData = await this.request<unknown>(
             `/orgs/${orgName}/copilot/metrics`,
             {
                 since: dateRange.from,
@@ -257,8 +264,51 @@ export class GitHubApiClient {
             }
         );
 
+        // Validate and transform the response
+        const metrics = this.validateResponse(rawData, orgName);
+
         this.setCache(cacheKey, metrics);
         return metrics;
+    }
+
+    // ===========================================================================
+    // Response Validation
+    // ===========================================================================
+
+    /**
+     * Validate API response against Zod schema.
+     * 
+     * This ensures the response matches our expected structure and
+     * provides clear error messages if the API contract changes.
+     * 
+     * @param data - Raw API response
+     * @param context - Context for error messages (enterprise/org name)
+     * @returns Validated metrics array
+     * @throws Error if validation fails
+     */
+    private validateResponse(data: unknown, context: string): CopilotUsageMetrics[] {
+        if (!VALIDATE_RESPONSES) {
+            // Skip validation if disabled (e.g., for performance)
+            return data as CopilotUsageMetrics[];
+        }
+
+        const result = validateMetricsResponse(data);
+
+        if (!result.success) {
+            const errors = formatValidationErrors(result.errors!);
+            console.error(`[Validation Error] Invalid API response for ${context}:`, errors);
+            throw new Error(
+                `GitHub API response validation failed for ${context}: ${errors.slice(0, 3).join('; ')}${errors.length > 3 ? ` (and ${errors.length - 3} more errors)` : ''}`
+            );
+        }
+
+        // Log warnings if any
+        if (result.warnings && result.warnings.length > 0) {
+            console.warn(`[Validation Warning] ${context}:`, result.warnings);
+        }
+
+        // Cast to our TypeScript types (validated by Zod schema)
+        return result.data! as unknown as CopilotUsageMetrics[];
     }
 
     // ===========================================================================

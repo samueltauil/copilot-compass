@@ -325,6 +325,23 @@ tests/
 - **GitHub API Client**: Token validation, enterprise/org endpoints, caching behavior, error handling
 - **Report Generator**: Live data transformation, mock data fallback, summary aggregation, edge cases
 - **SVG Charts**: Bar, line, donut, horizontal bar, and sparkline chart generation
+- **Schema Validation**: Zod schema validation, API response parsing, error formatting
+- **Integration**: End-to-end pipeline with realistic API fixtures
+
+### API Response Validation
+
+The project uses Zod schemas to validate GitHub API responses at runtime, ensuring data integrity:
+
+```typescript
+// Validation is automatic - errors are thrown if API response is malformed
+const metrics = await client.getEnterpriseMetrics('my-enterprise', dateRange);
+```
+
+Validation can be disabled for performance (not recommended):
+
+```bash
+VALIDATE_API_RESPONSES=false npm start
+```
 
 ## Tech Stack
 
