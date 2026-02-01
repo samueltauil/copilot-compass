@@ -2,10 +2,14 @@
 # Setup script for GitHub Codespaces
 # Configures MCP client settings and starts the server
 
-set -e
-
 echo "🧭 Copilot Compass - Codespaces Setup"
 echo "======================================"
+
+# Get the workspace directory (where the repo is cloned)
+WORKSPACE_DIR="${CODESPACE_VSCODE_FOLDER:-/workspaces/${GITHUB_REPOSITORY##*/}}"
+cd "$WORKSPACE_DIR" || { echo "❌ Could not cd to $WORKSPACE_DIR"; exit 1; }
+
+echo "📂 Working directory: $WORKSPACE_DIR"
 
 # Build if not already built
 if [ ! -f "dist/server.js" ]; then
@@ -23,7 +27,7 @@ else
 fi
 
 # Configure VS Code MCP settings (workspace-level for auto-trust)
-WORKSPACE_VSCODE_DIR="/workspaces/copilot-compass/.vscode"
+WORKSPACE_VSCODE_DIR="$WORKSPACE_DIR/.vscode"
 MCP_CONFIG_FILE="$WORKSPACE_VSCODE_DIR/mcp.json"
 
 mkdir -p "$WORKSPACE_VSCODE_DIR"
@@ -57,18 +61,12 @@ echo "🚀 Starting MCP server..."
 echo "   Logs: /tmp/mcp-server.log"
 echo "======================================"
 
-# Start the server in background, then make port public
-node dist/server.js &
-SERVER_PID=$!
-
-# Wait for server to start and port to be forwarded
-sleep 3
-
-# Make port public (only in Codespaces)
+# Make port public first (only in Codespaces)
 if [ -n "$CODESPACE_NAME" ]; then
     echo "🔓 Making port 3001 public..."
-    gh codespace ports visibility 3001:public -c "$CODESPACE_NAME" 2>/dev/null && echo "✅ Port 3001 is now public" || echo "⚠️  Could not set port visibility (may need manual setup)"
+    # Run in background since port isn't forwarded yet
+    (sleep 5 && gh codespace ports visibility 3001:public -c "$CODESPACE_NAME" 2>/dev/null && echo "✅ Port 3001 is now public" || echo "⚠️  Could not set port visibility") &
 fi
 
-# Wait for server process
-wait $SERVER_PID
+# Start the server (runs in foreground since this script is backgrounded)
+exec node dist/server.js
