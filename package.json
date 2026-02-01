@@ -1,9 +1,38 @@
 {
   "name": "copilot-compass",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "MCP App for navigating GitHub Copilot usage metrics with interactive dashboards",
   "type": "module",
   "main": "dist/server.js",
+  "bin": {
+    "copilot-compass": "dist/server.js"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samueltauil/copilot-compass.git"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "github-copilot",
+    "copilot-metrics",
+    "analytics",
+    "dashboard",
+    "ai",
+    "devtools"
+  ],
+  "author": "Samuel Tauil",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samueltauil/copilot-compass/issues"
+  },
+  "homepage": "https://github.com/samueltauil/copilot-compass#readme",
   "icon": "assets/icon.svg",
   "mcp": {
     "name": "Copilot Compass",
