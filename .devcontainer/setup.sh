@@ -57,5 +57,18 @@ echo "🚀 Starting MCP server..."
 echo "   Logs: /tmp/mcp-server.log"
 echo "======================================"
 
-# Start the server (runs in foreground, use nohup in devcontainer.json to background it)
-node dist/server.js
+# Start the server in background, then make port public
+node dist/server.js &
+SERVER_PID=$!
+
+# Wait for server to start and port to be forwarded
+sleep 3
+
+# Make port public (only in Codespaces)
+if [ -n "$CODESPACE_NAME" ]; then
+    echo "🔓 Making port 3001 public..."
+    gh codespace ports visibility 3001:public -c "$CODESPACE_NAME" 2>/dev/null && echo "✅ Port 3001 is now public" || echo "⚠️  Could not set port visibility (may need manual setup)"
+fi
+
+# Wait for server process
+wait $SERVER_PID

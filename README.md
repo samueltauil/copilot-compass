@@ -211,9 +211,12 @@ npm start  # Restart the server
    ✅ Codespaces detected: your-codespace-name
    ✅ MCP config written to: ~/.vscode-server/data/User/mcp.json
    🚀 Starting MCP server...
+   ✅ Port 3001 is now public
    ```
 
-2. Open the **Ports** tab and verify port 3001 is public
+2. Open the **Ports** tab and verify port 3001 shows **Public** visibility
+   - If it shows **Private**, right-click the port → **Port Visibility** → **Public**
+   - Or run: `gh codespace ports visibility 3001:public -c $CODESPACE_NAME`
 
 3. The MCP server is now ready! Use it from Copilot Chat — MCP discovery is enabled automatically.
 
