@@ -285,6 +285,47 @@ npm start
 npx tsc --noEmit
 ```
 
+## Testing
+
+The project includes a comprehensive test suite using [Vitest](https://vitest.dev/).
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode (re-runs on file changes)
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+```
+
+### Test Coverage
+
+| Module | Coverage | Description |
+|--------|----------|-------------|
+| `github-client.ts` | 98% | API client, caching, error handling |
+| `report-generator.ts` | 98% | Report generation, mock data, aggregation |
+| `svg-charts.ts` | 100% | SVG chart generation functions |
+
+### Test Structure
+
+```text
+tests/
+├── setup.ts                  # Global test setup and mocks
+├── github-client.test.ts     # API client tests (15 tests)
+├── report-generator.test.ts  # Report generator tests (18 tests)
+└── svg-charts.test.ts        # Chart generation tests (40 tests)
+```
+
+### What's Tested
+
+- **GitHub API Client**: Token validation, enterprise/org endpoints, caching behavior, error handling
+- **Report Generator**: Live data transformation, mock data fallback, summary aggregation, edge cases
+- **SVG Charts**: Bar, line, donut, horizontal bar, and sparkline chart generation
+
 ## Tech Stack
 
 - **Runtime**: Node.js 18+ with native ES modules
