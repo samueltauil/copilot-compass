@@ -170,9 +170,11 @@ The fastest way to get started — no local setup required! Codespaces provides 
 
 When your Codespace starts:
 1. ✅ Dependencies are installed and project is built
-2. ✅ MCP server starts automatically on port 3001
+2. ✅ MCP server starts automatically in the background on port 3001
 3. ✅ Port 3001 is made public with HTTPS
 4. ✅ VS Code's `mcp.json` is configured with your Codespace URL
+5. ✅ MCP discovery is enabled in VS Code settings
+6. ✅ README opens in preview mode
 
 The MCP server URL will be: `https://{codespace-name}-3001.app.github.dev/mcp`
 
@@ -199,7 +201,11 @@ npm start  # Restart the server
 
 #### Verify It's Working
 
-1. Check the terminal — you should see:
+1. The MCP server starts automatically in the background. Check the logs:
+   ```bash
+   cat /tmp/mcp-server.log
+   ```
+   You should see:
    ```
    🧭 Copilot Compass - Codespaces Setup
    ✅ Codespaces detected: your-codespace-name
@@ -209,16 +215,18 @@ npm start  # Restart the server
 
 2. Open the **Ports** tab and verify port 3001 is public
 
-3. The MCP server is now ready! Use it from Copilot Chat or any MCP client.
+3. The MCP server is now ready! Use it from Copilot Chat — MCP discovery is enabled automatically.
 
 #### Manual Start (If Needed)
 
 If the server stops or you need to restart:
 
 ```bash
+# Quick restart
 npm start
-# Or with auto-config:
-bash .devcontainer/setup.sh
+
+# Full setup with config
+nohup bash .devcontainer/setup.sh > /tmp/mcp-server.log 2>&1 &
 ```
 
 > **Tip**: The Codespaces URL persists as long as your Codespace is running. For long-term use, consider keeping the Codespace alive or using a dedicated VM.

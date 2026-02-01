@@ -16,7 +16,8 @@
   },
 
   "postCreateCommand": "npm install && npm run build",
-  "postStartCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "nohup bash .devcontainer/setup.sh > /tmp/mcp-server.log 2>&1 &",
+  "postAttachCommand": "code --goto README.md && code --command markdown.showPreview",
 
   "customizations": {
     "vscode": {
@@ -30,11 +31,13 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "typescript.preferences.importModuleSpecifier": "relative",
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "chat.mcp.discovery.enabled": true,
+        "chat.mcp.enabled": true
       }
     },
     "codespaces": {
-      "openFiles": ["README.md"]
+      "openFiles": []
     }
   },
 

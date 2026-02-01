@@ -54,7 +54,8 @@ fi
 
 echo ""
 echo "🚀 Starting MCP server..."
+echo "   Logs: /tmp/mcp-server.log"
 echo "======================================"
 
-# Start the server
-exec node dist/server.js
+# Start the server (runs in foreground, use nohup in devcontainer.json to background it)
+node dist/server.js
