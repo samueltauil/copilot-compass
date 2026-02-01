@@ -1,0 +1,50 @@
+{
+  "name": "Copilot Compass",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "forwardPorts": [3001],
+  "portsAttributes": {
+    "3001": {
+      "label": "MCP Server",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    }
+  },
+
+  "postCreateCommand": "npm install && npm run build",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.preferences.importModuleSpecifier": "relative"
+      }
+    },
+    "codespaces": {
+      "openFiles": ["README.md"]
+    }
+  },
+
+  "secrets": {
+    "GITHUB_TOKEN": {
+      "description": "GitHub Personal Access Token with manage_billing:copilot, read:enterprise, and read:org scopes",
+      "documentationUrl": "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"
+    }
+  },
+
+  "remoteEnv": {
+    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}"
+  }
+}

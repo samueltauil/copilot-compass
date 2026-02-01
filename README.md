@@ -27,7 +27,7 @@
 <p align="center">
   <a href="#features">Features</a> •
   <a href="#quick-start">Quick Start</a> •
-  <a href="#public-access-via-tunnel">Tunnel</a> •
+  <a href="#run-in-github-codespaces-easiest">Codespaces</a> •
   <a href="#usage-examples">Usage</a> •
   <a href="#architecture">Architecture</a> •
   <a href="#troubleshooting">Troubleshooting</a>
@@ -154,7 +154,66 @@ Add to your MCP client configuration (e.g., Claude Desktop, VS Code):
 }
 ```
 
-### Public Access via Tunnel
+### Run in GitHub Codespaces (Easiest)
+
+The fastest way to get started — no local setup required! Codespaces provides automatic HTTPS URLs, eliminating the need for tunneling tools.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/samueltauil/copilot-compass?quickstart=1)
+
+**Or manually:**
+
+1. Go to [github.com/samueltauil/copilot-compass](https://github.com/samueltauil/copilot-compass)
+2. Click **Code** → **Codespaces** → **Create codespace on main**
+3. Wait for the container to build (~2 minutes)
+
+#### Configure GitHub Token
+
+Before starting the server, add your GitHub token as a Codespaces secret:
+
+1. Go to [github.com/settings/codespaces](https://github.com/settings/codespaces)
+2. Click **New secret**
+3. Name: `GITHUB_TOKEN`
+4. Value: Your PAT with `manage_billing:copilot`, `read:enterprise`, `read:org` scopes
+5. Repository access: Select `samueltauil/copilot-compass`
+6. **Rebuild your Codespace** to apply the secret
+
+Alternatively, create a `.env` file in the Codespace terminal:
+
+```bash
+echo "GITHUB_TOKEN=your-token-here" > .env
+```
+
+#### Start the Server
+
+```bash
+npm start
+```
+
+#### Get Your Public URL
+
+1. Open the **Ports** tab in VS Code (bottom panel)
+2. Find port `3001` (labeled "MCP Server")
+3. Right-click → **Port Visibility** → **Public** (if not already)
+4. Copy the **Forwarded Address** (e.g., `https://username-codespace-abc123-3001.app.github.dev`)
+
+#### Connect Your MCP Client
+
+Use the Codespaces URL in your MCP configuration:
+
+```json
+{
+  "mcpServers": {
+    "copilot-compass": {
+      "type": "http",
+      "url": "https://username-codespace-abc123-3001.app.github.dev/mcp"
+    }
+  }
+}
+```
+
+> **Tip**: The Codespaces URL persists as long as your Codespace is running. For long-term use, consider running the server as a background task or using a dedicated VM.
+
+### Public Access via Tunnel (Local Development)
 
 To expose your local MCP server to the internet (useful for sharing, mobile access, or cloud-based MCP clients), you can use a tunneling service.
 
