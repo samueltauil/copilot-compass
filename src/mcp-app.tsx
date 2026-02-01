@@ -29,6 +29,24 @@ import { Bar, Line, Doughnut } from "react-chartjs-2";
 import type { CopilotReport } from "./types";
 import "./global.css";
 
+// Compass Logo SVG Component
+const CompassLogo = ({ size = 32 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="45" stroke="#58a6ff" strokeWidth="3" fill="none" />
+        <circle cx="50" cy="50" r="38" stroke="#58a6ff" strokeWidth="1.5" fill="none" opacity="0.5" />
+        <polygon points="50,12 56,44 50,50 44,44" fill="#f85149" />
+        <polygon points="50,88 44,56 50,50 56,56" fill="#e6edf3" />
+        <polygon points="12,50 44,44 50,50 44,56" fill="#7d8590" />
+        <polygon points="88,50 56,56 50,50 56,44" fill="#7d8590" />
+        <circle cx="50" cy="50" r="6" fill="#58a6ff" />
+        <circle cx="50" cy="50" r="3" fill="#0d1117" />
+        <text x="50" y="8" textAnchor="middle" fill="#e6edf3" fontSize="8" fontWeight="bold">N</text>
+        <text x="50" y="98" textAnchor="middle" fill="#7d8590" fontSize="8">S</text>
+        <text x="6" y="53" textAnchor="middle" fill="#7d8590" fontSize="8">W</text>
+        <text x="94" y="53" textAnchor="middle" fill="#7d8590" fontSize="8">E</text>
+    </svg>
+);
+
 // Register Chart.js components
 ChartJS.register(
     CategoryScale,
@@ -177,7 +195,7 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
                 }}
             >
                 <div className="placeholder">
-                    <div className="placeholder-icon">📊</div>
+                    <div className="placeholder-icon"><CompassLogo size={64} /></div>
                     <h2>Copilot Metrics Dashboard</h2>
                     <p>
                         Waiting for report data. Use the{" "}
@@ -329,13 +347,16 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
         >
             {/* Header */}
             <div className="header">
-                <h1>📊 GitHub Copilot Usage Report</h1>
+                <div className="header-title">
+                    <CompassLogo size={40} />
+                    <h1>GitHub Copilot Usage Report</h1>
+                </div>
                 <div className="header-meta">
-                    <span>📅 {metadata.dateRange.from} → {metadata.dateRange.to}</span>
-                    <span>🏢 {metadata.orgName || metadata.enterpriseSlug}</span>
-                    <span>📆 {metadata.totalDays} days</span>
-                    <span>
-                        {reportData.dataSource === 'live' ? '✅ Live Data' : '⚠️ Demo Data'}
+                    <span className="meta-item">{metadata.dateRange.from} → {metadata.dateRange.to}</span>
+                    <span className="meta-item">{metadata.orgName || metadata.enterpriseSlug}</span>
+                    <span className="meta-item">{metadata.totalDays} days</span>
+                    <span className={`meta-item ${reportData.dataSource === 'live' ? 'status-live' : 'status-demo'}`}>
+                        {reportData.dataSource === 'live' ? 'Live Data' : 'Demo Data'}
                     </span>
                 </div>
             </div>
@@ -343,7 +364,7 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
             {/* Mock Data Warning */}
             {reportData.dataSource === 'mock' && (
                 <div className="mock-warning">
-                    <h3>⚠️ Demo Mode - Using Sample Data</h3>
+                    <h3>Demo Mode - Using Sample Data</h3>
                     <p>
                         {reportData.apiError || 'Unable to fetch live data.'}
                         Ensure your GITHUB_TOKEN has manage_billing:copilot and read:enterprise scopes.
@@ -382,13 +403,13 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
             {/* Charts Grid */}
             <div className="charts-grid">
                 <div className="section">
-                    <h2>📈 Active Users Trend (14 days)</h2>
+                    <h2>Active Users Trend (14 days)</h2>
                     <div className="chart-container">
                         <Line data={activeUsersTrendData} options={lineChartOptions} />
                     </div>
                 </div>
                 <div className="section">
-                    <h2>✅ Acceptance Rate Trend (14 days)</h2>
+                    <h2>Acceptance Rate Trend (14 days)</h2>
                     <div className="chart-container">
                         <Line data={acceptanceRateTrendData} options={lineChartOptions} />
                     </div>
@@ -397,13 +418,13 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
 
             <div className="charts-grid">
                 <div className="section">
-                    <h2>🔤 Top Languages by Suggestions</h2>
+                    <h2>Top Languages by Suggestions</h2>
                     <div className="chart-container">
                         <Bar data={languageChartData} options={barChartOptions} />
                     </div>
                 </div>
                 <div className="section">
-                    <h2>🖥️ Editor Distribution</h2>
+                    <h2>Editor Distribution</h2>
                     <div className="chart-container">
                         <Doughnut data={editorChartData} options={doughnutOptions} />
                     </div>
@@ -412,7 +433,7 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
 
             {/* Chat & Assistance */}
             <div className="section">
-                <h2>💬 Chat & Assistance</h2>
+                <h2>Chat & Assistance</h2>
                 <div className="kpi-grid">
                     <div className="kpi-card">
                         <div className="kpi-label">Chat Sessions</div>
@@ -441,7 +462,7 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
 
             {/* Language Breakdown Table */}
             <div className="section">
-                <h2>🔤 Language Breakdown</h2>
+                <h2>Language Breakdown</h2>
                 <table className="data-table">
                     <thead>
                         <tr>
@@ -456,8 +477,8 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
                     <tbody>
                         {languageBreakdown.slice(0, 10).map((lang, i) => (
                             <tr key={lang.language}>
-                                <td className="rank">
-                                    {i < 3 ? ['🥇', '🥈', '🥉'][i] : i + 1}
+                                <td className={`rank ${i < 3 ? 'rank-' + (i + 1) : ''}`}>
+                                    {i + 1}
                                 </td>
                                 <td>{lang.language}</td>
                                 <td className="number">{formatNumber(lang.suggestions)}</td>
@@ -472,7 +493,7 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
 
             {/* Editor Breakdown Table */}
             <div className="section">
-                <h2>🖥️ Editor Breakdown</h2>
+                <h2>Editor Breakdown</h2>
                 <table className="data-table">
                     <thead>
                         <tr>

@@ -104,10 +104,17 @@ body {
   margin-bottom: 24px;
 }
 
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 .header h1 {
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin: 0;
 }
 
 .header-meta {
@@ -116,6 +123,42 @@ body {
   gap: 16px;
   font-size: 0.875rem;
   color: var(--text-secondary);
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-live {
+  color: var(--accent-green);
+  font-weight: 500;
+}
+
+.status-live::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.status-demo {
+  color: var(--accent-orange);
+  font-weight: 500;
+}
+
+.status-demo::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-orange);
+  border-radius: 50%;
+  margin-right: 4px;
 }
 
 /* Mock Data Warning */
@@ -261,6 +304,21 @@ body {
 .data-table .rank {
   width: 40px;
   text-align: center;
+}
+
+.data-table .rank-1 {
+  color: #ffd700;
+  font-weight: 700;
+}
+
+.data-table .rank-2 {
+  color: #c0c0c0;
+  font-weight: 600;
+}
+
+.data-table .rank-3 {
+  color: #cd7f32;
+  font-weight: 600;
 }
 
 /* Progress Bar */
