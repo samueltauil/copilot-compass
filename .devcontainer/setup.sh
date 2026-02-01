@@ -22,15 +22,15 @@ else
     echo "⚠️  Not running in Codespaces, using localhost"
 fi
 
-# Configure VS Code MCP settings
-MCP_CONFIG_DIR="$HOME/.vscode-server/data/User"
-MCP_CONFIG_FILE="$MCP_CONFIG_DIR/mcp.json"
+# Configure VS Code MCP settings (workspace-level for auto-trust)
+WORKSPACE_VSCODE_DIR="/workspaces/copilot-compass/.vscode"
+MCP_CONFIG_FILE="$WORKSPACE_VSCODE_DIR/mcp.json"
 
-mkdir -p "$MCP_CONFIG_DIR"
+mkdir -p "$WORKSPACE_VSCODE_DIR"
 
 cat > "$MCP_CONFIG_FILE" << EOF
 {
-  "mcpServers": {
+  "servers": {
     "copilot-compass": {
       "type": "http",
       "url": "$MCP_URL"

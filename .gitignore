@@ -13,6 +13,7 @@ dist/
 .idea/
 *.swp
 *.swo
+.vscode/mcp.json
 
 # OS files
 .DS_Store
