@@ -10,26 +10,27 @@
   "portsAttributes": {
     "3001": {
       "label": "MCP Server",
-      "onAutoForward": "notify",
+      "onAutoForward": "openBrowserOnce",
       "visibility": "public"
     }
   },
 
   "postCreateCommand": "npm install && npm run build",
+  "postStartCommand": "bash .devcontainer/setup.sh",
 
   "customizations": {
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
         "GitHub.copilot",
         "GitHub.copilot-chat"
       ],
       "settings": {
         "editor.formatOnSave": true,
-        "editor.defaultFormatter": null,
-        "typescript.preferences.importModuleSpecifier": "relative"
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "terminal.integrated.defaultProfile.linux": "bash"
       }
     },
     "codespaces": {

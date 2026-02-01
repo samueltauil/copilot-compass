@@ -156,7 +156,7 @@ Add to your MCP client configuration (e.g., Claude Desktop, VS Code):
 
 ### Run in GitHub Codespaces (Easiest)
 
-The fastest way to get started — no local setup required! Codespaces provides automatic HTTPS URLs, eliminating the need for tunneling tools.
+The fastest way to get started — no local setup required! Codespaces provides automatic HTTPS URLs and **auto-configures** the MCP client settings for you.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/samueltauil/copilot-compass?quickstart=1)
 
@@ -166,9 +166,19 @@ The fastest way to get started — no local setup required! Codespaces provides 
 2. Click **Code** → **Codespaces** → **Create codespace on main**
 3. Wait for the container to build (~2 minutes)
 
-#### Configure GitHub Token
+#### What Happens Automatically
 
-Before starting the server, add your GitHub token as a Codespaces secret:
+When your Codespace starts:
+1. ✅ Dependencies are installed and project is built
+2. ✅ MCP server starts automatically on port 3001
+3. ✅ Port 3001 is made public with HTTPS
+4. ✅ VS Code's `mcp.json` is configured with your Codespace URL
+
+The MCP server URL will be: `https://{codespace-name}-3001.app.github.dev/mcp`
+
+#### Configure GitHub Token (Optional)
+
+For live Copilot metrics (instead of demo data), add your GitHub token as a Codespaces secret:
 
 1. Go to [github.com/settings/codespaces](https://github.com/settings/codespaces)
 2. Click **New secret**
@@ -181,37 +191,34 @@ Alternatively, create a `.env` file in the Codespace terminal:
 
 ```bash
 echo "GITHUB_TOKEN=your-token-here" > .env
+npm start  # Restart the server
 ```
 
-#### Start the Server
+#### Verify It's Working
+
+1. Check the terminal — you should see:
+   ```
+   🧭 Copilot Compass - Codespaces Setup
+   ✅ Codespaces detected: your-codespace-name
+   ✅ MCP config written to: ~/.vscode-server/data/User/mcp.json
+   🚀 Starting MCP server...
+   ```
+
+2. Open the **Ports** tab and verify port 3001 is public
+
+3. The MCP server is now ready! Use it from Copilot Chat or any MCP client.
+
+#### Manual Start (If Needed)
+
+If the server stops or you need to restart:
 
 ```bash
 npm start
+# Or with auto-config:
+bash .devcontainer/setup.sh
 ```
 
-#### Get Your Public URL
-
-1. Open the **Ports** tab in VS Code (bottom panel)
-2. Find port `3001` (labeled "MCP Server")
-3. Right-click → **Port Visibility** → **Public** (if not already)
-4. Copy the **Forwarded Address** (e.g., `https://username-codespace-abc123-3001.app.github.dev`)
-
-#### Connect Your MCP Client
-
-Use the Codespaces URL in your MCP configuration:
-
-```json
-{
-  "mcpServers": {
-    "copilot-compass": {
-      "type": "http",
-      "url": "https://username-codespace-abc123-3001.app.github.dev/mcp"
-    }
-  }
-}
-```
-
-> **Tip**: The Codespaces URL persists as long as your Codespace is running. For long-term use, consider running the server as a background task or using a dedicated VM.
+> **Tip**: The Codespaces URL persists as long as your Codespace is running. For long-term use, consider keeping the Codespace alive or using a dedicated VM.
 
 ### Public Access via Tunnel (Local Development)
 
