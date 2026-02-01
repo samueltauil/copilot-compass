@@ -10,7 +10,7 @@
  * - Real API responses (anonymized)
  */
 
-import type { CopilotUsageMetrics } from '../src/types.js';
+import type { CopilotUsageMetrics } from '../../src/types.js';
 
 // =============================================================================
 // Complete Valid Response
