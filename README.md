@@ -154,6 +154,27 @@ Add to your MCP client configuration (e.g., Claude Desktop, VS Code):
 }
 ```
 
+**For VS Code users:**
+
+Copy the included example file to create your MCP config:
+```bash
+cp .vscode/mcp.json.example .vscode/mcp.json
+```
+
+The default uses `localhost:3001`. If using a tunnel (cloudflared, ngrok), edit `.vscode/mcp.json` to use your tunnel URL:
+```json
+{
+  "servers": {
+    "copilot-compass": {
+      "type": "http",
+      "url": "https://your-tunnel-url.trycloudflare.com/mcp"
+    }
+  }
+}
+```
+
+> **Note:** `.vscode/mcp.json` is gitignored so your local config won't be overwritten.
+
 ### Run in GitHub Codespaces (Easiest)
 
 The fastest way to get started — no local setup required! Codespaces provides automatic HTTPS URLs and **auto-configures** the MCP client settings for you.
@@ -172,7 +193,7 @@ When your Codespace starts:
 1. ✅ Dependencies are installed and project is built
 2. ✅ MCP server starts automatically in the background on port 3001
 3. ✅ Port 3001 is made public with HTTPS
-4. ✅ VS Code's `mcp.json` is configured with your Codespace URL
+4. ✅ `.vscode/mcp.json` is created from the example template
 5. ✅ MCP discovery is enabled in VS Code settings
 6. ✅ README opens in preview mode
 

@@ -17,6 +17,12 @@ if [ ! -f "dist/server.js" ]; then
     npm run build
 fi
 
+# Copy mcp.json from example if not present
+if [ ! -f ".vscode/mcp.json" ]; then
+    cp .vscode/mcp.json.example .vscode/mcp.json
+    echo "✅ Created .vscode/mcp.json from example"
+fi
+
 echo ""
 echo "📋 MCP config at: .vscode/mcp.json (uses localhost:3001 via port forwarding)"
 echo ""
