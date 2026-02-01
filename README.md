@@ -62,9 +62,6 @@ Unlike traditional dashboards, Copilot Compass leverages the **MCP Apps SDK** pa
 - **Chat Metrics** — Sessions, code insertions, and copy events from Copilot Chat
 - **PR Intelligence** — Pull request summary generation statistics
 
-<details>
-<summary><strong>📸 Dashboard Screenshots</strong> (click to expand)</summary>
-<br>
 <table>
   <tr>
     <td><img src="docs/report1.png" alt="Dashboard Overview" width="400" /></td>
@@ -78,7 +75,6 @@ Unlike traditional dashboards, Copilot Compass leverages the **MCP Apps SDK** pa
     <td colspan="2" align="center"><img src="docs/report5.png" alt="Detailed Metrics" width="400" /></td>
   </tr>
 </table>
-</details>
 
 ### Understanding the Metrics
 
