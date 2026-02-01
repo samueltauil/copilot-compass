@@ -388,6 +388,138 @@ describe('Report Structure Completeness', () => {
 });
 
 // =============================================================================
+// Organization Metrics Integration Tests
+// =============================================================================
+
+describe('Organization Metrics Integration', () => {
+  let mockClient: any;
+  let generator: ReportGenerator;
+
+  beforeEach(() => {
+    mockClient = {
+      getEnterpriseMetrics: vi.fn(),
+      getOrganizationMetrics: vi.fn(),
+    };
+    generator = new ReportGenerator(mockClient as unknown as GitHubApiClient);
+  });
+
+  describe('with complete valid response', () => {
+    beforeEach(() => {
+      mockClient.getOrganizationMetrics.mockResolvedValue(completeValidResponse);
+    });
+
+    it('should generate org report without errors', async () => {
+      const report = await generator.generateReport({
+        enterpriseSlug: 'test-enterprise',
+        orgName: 'test-org',
+        dateRange: { from: '2026-01-15', to: '2026-01-16' },
+      });
+
+      expect(report.dataSource).toBe('live');
+      expect(report.apiError).toBeUndefined();
+    });
+
+    it('should correctly aggregate language breakdown for org', async () => {
+      const report = await generator.generateReport({
+        enterpriseSlug: 'test-enterprise',
+        orgName: 'test-org',
+        dateRange: { from: '2026-01-15', to: '2026-01-16' },
+      });
+
+      expect(report.languageBreakdown.length).toBeGreaterThan(0);
+      
+      const typescript = report.languageBreakdown.find(l => l.language === 'TypeScript');
+      expect(typescript).toBeDefined();
+      expect(typescript!.suggestions).toBeGreaterThan(0);
+    });
+
+    it('should correctly calculate chat metrics for org', async () => {
+      const report = await generator.generateReport({
+        enterpriseSlug: 'test-enterprise',
+        orgName: 'test-org',
+        dateRange: { from: '2026-01-15', to: '2026-01-16' },
+      });
+
+      expect(report.summary.totalChats).toBeGreaterThan(0);
+      expect(report.summary.totalChatInsertions).toBeGreaterThan(0);
+    });
+  });
+
+  describe('with minimal valid response', () => {
+    beforeEach(() => {
+      mockClient.getOrganizationMetrics.mockResolvedValue(minimalValidResponse);
+    });
+
+    it('should handle missing optional fields gracefully for org', async () => {
+      const report = await generator.generateReport({
+        enterpriseSlug: 'test-enterprise',
+        orgName: 'test-org',
+        dateRange: { from: '2026-01-15', to: '2026-01-16' },
+      });
+
+      expect(report.dataSource).toBe('live');
+      expect(report.summary.totalCodeSuggestions).toBe(0);
+      expect(report.summary.totalChats).toBe(0);
+      expect(report.languageBreakdown).toEqual([]);
+    });
+  });
+
+  describe('with empty response', () => {
+    beforeEach(() => {
+      mockClient.getOrganizationMetrics.mockResolvedValue(emptyResponse);
+    });
+
+    it('should generate org report with zero values', async () => {
+      const report = await generator.generateReport({
+        enterpriseSlug: 'test-enterprise',
+        orgName: 'test-org',
+        dateRange: { from: '2026-01-15', to: '2026-01-16' },
+      });
+
+      expect(report.dataSource).toBe('live');
+      expect(report.dailyMetrics.length).toBe(0);
+      expect(report.summary.totalActiveUsers).toBe(0);
+    });
+  });
+
+  describe('with large response (performance)', () => {
+    it('should handle 90 days of org data efficiently', async () => {
+      const largeResponse = generateLargeResponse(90);
+      mockClient.getOrganizationMetrics.mockResolvedValue(largeResponse);
+
+      const startTime = performance.now();
+      
+      const report = await generator.generateReport({
+        enterpriseSlug: 'test-enterprise',
+        orgName: 'test-org',
+        dateRange: { from: '2025-11-01', to: '2026-01-31' },
+      });
+      
+      const duration = performance.now() - startTime;
+
+      expect(report.dailyMetrics.length).toBe(90);
+      expect(duration).toBeLessThan(500);
+    });
+  });
+
+  it('should use getOrganizationMetrics not getEnterpriseMetrics for org', async () => {
+    mockClient.getOrganizationMetrics.mockResolvedValue(completeValidResponse);
+
+    await generator.generateReport({
+      enterpriseSlug: 'my-enterprise',
+      orgName: 'my-org',
+      dateRange: { from: '2026-01-15', to: '2026-01-16' },
+    });
+
+    expect(mockClient.getOrganizationMetrics).toHaveBeenCalledWith(
+      'my-org',
+      { from: '2026-01-15', to: '2026-01-16' }
+    );
+    expect(mockClient.getEnterpriseMetrics).not.toHaveBeenCalled();
+  });
+});
+
+// =============================================================================
 // Error Handling Tests
 // =============================================================================
 
@@ -403,11 +535,24 @@ describe('Error Handling', () => {
     generator = new ReportGenerator(mockClient as unknown as GitHubApiClient);
   });
 
-  it('should fall back to mock on API error', async () => {
+  it('should fall back to mock on enterprise API error', async () => {
     mockClient.getEnterpriseMetrics.mockRejectedValue(new Error('API rate limited'));
 
     const report = await generator.generateReport({
       enterpriseSlug: 'test',
+      dateRange: { from: '2026-01-15', to: '2026-01-16' },
+    });
+
+    expect(report.dataSource).toBe('mock');
+    expect(report.apiError).toBe('API rate limited');
+  });
+
+  it('should fall back to mock on org API error', async () => {
+    mockClient.getOrganizationMetrics.mockRejectedValue(new Error('API rate limited'));
+
+    const report = await generator.generateReport({
+      enterpriseSlug: 'test-enterprise',
+      orgName: 'test-org',
       dateRange: { from: '2026-01-15', to: '2026-01-16' },
     });
 
