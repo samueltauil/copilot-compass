@@ -39,6 +39,10 @@
 
 **Copilot Compass** is a Model Context Protocol (MCP) application that transforms raw GitHub Copilot metrics into actionable intelligence. Built with the MCP Apps SDK, it provides both AI-readable data and an interactive visual dashboard that renders directly in MCP-compatible hosts like VS Code and Claude Desktop.
 
+<p align="center">
+  <img src="docs/report1.png" alt="Copilot Compass Dashboard" width="800" />
+</p>
+
 ### What Makes This Special?
 
 Unlike traditional dashboards, Copilot Compass leverages the **MCP Apps SDK** pattern:
@@ -58,6 +62,14 @@ Unlike traditional dashboards, Copilot Compass leverages the **MCP Apps SDK** pa
 - **Chat Metrics** — Sessions, code insertions, and copy events from Copilot Chat
 - **PR Intelligence** — Pull request summary generation statistics
 
+<p align="center">
+  <img src="docs/report2.png" alt="Usage Trends Chart" width="800" />
+</p>
+
+<p align="center">
+  <img src="docs/report3.png" alt="Language Breakdown" width="800" />
+</p>
+
 ### Understanding the Metrics
 
 | Metric | What It Measures | Why It Matters |
@@ -69,6 +81,14 @@ Unlike traditional dashboards, Copilot Compass leverages the **MCP Apps SDK** pa
 | **Chat Sessions** | Copilot Chat conversations initiated | AI pair programming usage |
 | **Code Insertions** | Chat-generated code added to files | Conversational coding value |
 | **PR Summaries** | Pull request descriptions auto-generated | Review process efficiency |
+
+<p align="center">
+  <img src="docs/report4.png" alt="Editor Distribution & Chat Metrics" width="800" />
+</p>
+
+<p align="center">
+  <img src="docs/report5.png" alt="Detailed Metrics" width="800" />
+</p>
 
 ### Report Generation
 - **Enterprise & Organization Support** — Fetch metrics at enterprise or org level
@@ -492,6 +512,10 @@ Same parameters as above, but with `visibility: ["app"]` — hidden from AI, inv
 
 Here are some common prompts to get the most out of Copilot Compass:
 
+<p align="center">
+  <img src="docs/request-prompt.png" alt="Example Prompt Request" width="800" />
+</p>
+
 ### Basic Report Generation
 
 ```text
@@ -527,6 +551,10 @@ Analyze the Copilot report for "acme-corp" and tell me:
 ```
 
 ### Dashboard Insights
+
+<p align="center">
+  <img src="docs/report-result.png" alt="Report Result with AI Summary" width="800" />
+</p>
 
 The AI model can analyze the report data and provide insights like:
 
