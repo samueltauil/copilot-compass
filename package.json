@@ -1,11 +1,14 @@
 {
-  "name": "copilot-compass",
+  "name": "@samueltauil/copilot-compass",
   "version": "0.0.1",
   "description": "MCP App for navigating GitHub Copilot usage metrics with interactive dashboards",
   "type": "module",
   "main": "dist/server.js",
   "bin": {
     "copilot-compass": "dist/server.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist",
