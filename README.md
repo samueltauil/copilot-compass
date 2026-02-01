@@ -184,8 +184,8 @@ For live Copilot metrics (instead of demo data), add your GitHub token as a Code
 2. Click **New secret**
 3. Name: `GITHUB_TOKEN`
 4. Value: Your PAT with `manage_billing:copilot`, `read:enterprise`, `read:org` scopes
-5. Repository access: Select `samueltauil/copilot-compass`
-6. **Rebuild your Codespace** to apply the secret
+5. Repository access: Select the repository where you're running the Codespace
+6. **Stop and restart your Codespace** to apply the secret (or run `bash .devcontainer/setup.sh` if already running)
 
 Alternatively, create a `.env` file in the Codespace terminal:
 
