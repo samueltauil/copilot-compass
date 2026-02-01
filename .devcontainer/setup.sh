@@ -64,14 +64,20 @@ fi
 # Start the server in background with proper logging
 nohup node dist/server.js > /tmp/mcp-server.log 2>&1 &
 SERVER_PID=$!
+disown $SERVER_PID
 echo "✅ MCP server started (PID: $SERVER_PID)"
 echo "   Logs: tail -f /tmp/mcp-server.log"
 
-# Wait a moment and verify it's running
-sleep 2
-if kill -0 $SERVER_PID 2>/dev/null; then
-    echo "✅ Server is running"
-else
-    echo "❌ Server failed to start. Check /tmp/mcp-server.log"
-    cat /tmp/mcp-server.log
-fi
+# Wait for server to be ready (up to 30 seconds)
+echo "⏳ Waiting for server to be ready..."
+for i in {1..30}; do
+    if curl -s http://localhost:3001/health > /dev/null 2>&1; then
+        echo "✅ Server is ready and responding on port 3001"
+        exit 0
+    fi
+    sleep 1
+done
+
+echo "❌ Server failed to start within 30 seconds. Logs:"
+cat /tmp/mcp-server.log
+exit 1
