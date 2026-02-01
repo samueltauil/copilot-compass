@@ -104,11 +104,30 @@ The server starts at `http://localhost:3001` with:
 
 Add to your MCP client configuration (e.g., Claude Desktop, VS Code):
 
+**For remote HTTP connection:**
 ```json
 {
   "mcpServers": {
     "copilot-compass": {
+      "type": "http",
       "url": "http://localhost:3001/mcp"
+    }
+  }
+}
+```
+
+**For local stdio connection (alternative):**
+```json
+{
+  "mcpServers": {
+    "copilot-compass": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["dist/server.js"],
+      "cwd": "/path/to/copilot-compass",
+      "env": {
+        "GITHUB_TOKEN": "your-github-token"
+      }
     }
   }
 }
