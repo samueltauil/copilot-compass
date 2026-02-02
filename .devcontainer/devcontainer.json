@@ -42,13 +42,13 @@
   },
 
   "secrets": {
-    "GITHUB_TOKEN": {
+    "GH_TOKEN": {
       "description": "GitHub Personal Access Token with manage_billing:copilot, read:enterprise, and read:org scopes",
       "documentationUrl": "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens"
     }
   },
 
   "remoteEnv": {
-    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}"
+    "GH_TOKEN": "${localEnv:GH_TOKEN}"
   }
 }

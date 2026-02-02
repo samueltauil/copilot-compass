@@ -44,12 +44,12 @@ echo ""
 echo "📋 MCP config at: .vscode/mcp.json (uses localhost:3001 via port forwarding)"
 echo ""
 
-# Check for GITHUB_TOKEN
-if [ -z "$GITHUB_TOKEN" ]; then
-    echo "⚠️  GITHUB_TOKEN not set - will use demo data"
+# Check for GH_TOKEN
+if [ -z "$GH_TOKEN" ]; then
+    echo "⚠️  GH_TOKEN not set - will use demo data"
     echo "   Set it in Codespaces secrets: https://github.com/settings/codespaces"
 else
-    echo "✅ GITHUB_TOKEN is configured"
+    echo "✅ GH_TOKEN is configured"
 fi
 
 echo ""
