@@ -367,7 +367,7 @@ function ReportDashboard({ reportData, hostContext, error }: ReportDashboardProp
                     <h3>Demo Mode - Using Sample Data</h3>
                     <p>
                         {reportData.apiError || 'Unable to fetch live data.'}
-                        Ensure your GITHUB_TOKEN has manage_billing:copilot and read:enterprise scopes.
+                        Ensure your GH_TOKEN (or GITHUB_TOKEN) has manage_billing:copilot and read:enterprise scopes.
                     </p>
                 </div>
             )}

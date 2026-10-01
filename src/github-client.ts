@@ -57,7 +57,7 @@ const cache = new Map<string, CacheEntry<CopilotUsageMetrics[]>>();
  *
  * Usage:
  * ```typescript
- * const client = new GitHubApiClient(process.env.GITHUB_TOKEN);
+ * const client = new GitHubApiClient(process.env.GH_TOKEN);
  * const metrics = await client.getEnterpriseMetrics("my-enterprise", {
  *   from: "2024-01-01",
  *   to: "2024-01-31"
@@ -71,13 +71,15 @@ export class GitHubApiClient {
     /**
      * Creates a new GitHub API client.
      *
-     * @param token - GitHub PAT (optional, can be set via GITHUB_TOKEN env var)
+     * @param token - GitHub PAT (optional; falls back to the GH_TOKEN, then GITHUB_TOKEN, env var)
      *
      * Note: Token validation is deferred to API call time to allow
      * server startup without a token (useful for demo mode with mock data).
      */
     constructor(token?: string) {
-        this.token = token || process.env.GITHUB_TOKEN || "";
+        // GH_TOKEN wins: Codespaces reserves the GITHUB_ secret prefix and injects its own
+        // repo-scoped GITHUB_TOKEN, which lacks the Copilot metrics scopes.
+        this.token = token || process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
     }
 
     // ===========================================================================
@@ -93,7 +95,7 @@ export class GitHubApiClient {
     private validateToken(): void {
         if (!this.token) {
             throw new Error(
-                "GitHub token is required. Set GITHUB_TOKEN environment variable or pass token to constructor."
+                "GitHub token is required. Set the GH_TOKEN (or GITHUB_TOKEN) environment variable or pass token to constructor."
             );
         }
     }

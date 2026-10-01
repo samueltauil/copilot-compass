@@ -95,6 +95,29 @@ const mockMetricsResponse: CopilotUsageMetrics[] = [
   },
 ];
 
+function restoreEnv(name: string, value: string | undefined): void {
+  if (value === undefined) {
+    delete process.env[name];
+  } else {
+    process.env[name] = value;
+  }
+}
+
+async function authorizationHeaderFor(envClient: GitHubApiClient): Promise<string> {
+  vi.mocked(global.fetch).mockResolvedValueOnce({
+    ok: true,
+    json: () => Promise.resolve([]),
+  } as Response);
+
+  await envClient.getEnterpriseMetrics('my-enterprise', {
+    from: '2026-01-15',
+    to: '2026-01-16',
+  });
+
+  const init = vi.mocked(global.fetch).mock.calls[0][1] as RequestInit;
+  return (init.headers as Record<string, string>).Authorization;
+}
+
 describe('GitHubApiClient', () => {
   let client: GitHubApiClient;
 
@@ -128,6 +151,37 @@ describe('GitHubApiClient', () => {
       process.env.GITHUB_TOKEN = 'env-token';
       const clientEnv = new GitHubApiClient();
       expect(clientEnv).toBeDefined();
+    });
+
+    it('should prefer GH_TOKEN over GITHUB_TOKEN from the environment', async () => {
+      const originalGhToken = process.env.GH_TOKEN;
+      const originalGithubToken = process.env.GITHUB_TOKEN;
+      process.env.GH_TOKEN = 'gh-env-token';
+      process.env.GITHUB_TOKEN = 'github-env-token';
+
+      try {
+        const authorization = await authorizationHeaderFor(new GitHubApiClient());
+        expect(authorization).toContain('gh-env-token');
+        expect(authorization).not.toContain('github-env-token');
+      } finally {
+        restoreEnv('GH_TOKEN', originalGhToken);
+        restoreEnv('GITHUB_TOKEN', originalGithubToken);
+      }
+    });
+
+    it('should fall back to GITHUB_TOKEN when GH_TOKEN is not set', async () => {
+      const originalGhToken = process.env.GH_TOKEN;
+      const originalGithubToken = process.env.GITHUB_TOKEN;
+      delete process.env.GH_TOKEN;
+      process.env.GITHUB_TOKEN = 'github-env-token';
+
+      try {
+        const authorization = await authorizationHeaderFor(new GitHubApiClient());
+        expect(authorization).toContain('github-env-token');
+      } finally {
+        restoreEnv('GH_TOKEN', originalGhToken);
+        restoreEnv('GITHUB_TOKEN', originalGithubToken);
+      }
     });
   });
 

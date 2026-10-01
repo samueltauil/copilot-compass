@@ -239,7 +239,7 @@ For live Copilot metrics (instead of demo data), add your GitHub token as a Code
 
 1. Go to [github.com/settings/codespaces](https://github.com/settings/codespaces)
 2. Click **New secret**
-3. Name: `GITHUB_TOKEN`
+3. Name: `GH_TOKEN` (Codespaces secret names can't start with `GITHUB_`, and Codespaces injects its own `GITHUB_TOKEN` that lacks Copilot metrics scopes)
 4. Value: Your PAT with `manage_billing:copilot`, `read:enterprise`, `read:org` scopes
 5. Repository access: Select the repository where you're running the Codespace
 6. Apply the secret to your Codespace:
@@ -250,7 +250,7 @@ For live Copilot metrics (instead of demo data), add your GitHub token as a Code
 Alternatively, create a `.env` file in the Codespace terminal:
 
 ```bash
-echo "GITHUB_TOKEN=your-token-here" > .env
+echo "GH_TOKEN=your-token-here" > .env
 npm start  # Restart the server
 ```
 
@@ -597,7 +597,8 @@ cp .env.example .env
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `GITHUB_TOKEN` | GitHub PAT with Copilot metrics access | — |
+| `GH_TOKEN` | GitHub PAT with Copilot metrics access (takes precedence over `GITHUB_TOKEN`; use this name in Codespaces) | — |
+| `GITHUB_TOKEN` | Fallback PAT used when `GH_TOKEN` is not set | — |
 | `PORT` | Server port | `3001` |
 | `MCP_SERVER_PORT` | Alternative port variable | `3001` |
 | `CACHE_TTL_SECONDS` | API response cache duration | `300` |
@@ -718,7 +719,7 @@ VALIDATE_API_RESPONSES=false npm start
 
 **Solution**:
 1. Check the server logs for API error messages
-2. Verify your `GITHUB_TOKEN` environment variable is set
+2. Verify your `GH_TOKEN` (or `GITHUB_TOKEN`) environment variable is set
 3. Ensure the token has the correct scopes
 4. Try a shorter date range (API returns max 28 days per request)
 
